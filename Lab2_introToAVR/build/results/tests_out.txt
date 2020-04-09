@@ -1,7 +1,7 @@
-Breakpoint 1 at 0xf6: file source/main.c, line 31.
+Breakpoint 1 at 0xf2: file source/main.c, line 29.
 Note: automatically using hardware breakpoints for read-only addresses.
 ======================================================
 Running all tests..."
 
-"PINA: 0x00, PINB: 0x00, PINC: 0x00	=> PORTD: 0x00"...test/tests.gdb:47: Error in sourced command file:
-Remote communication error.  Target disconnected.: Connection reset by peer.
+"PINA: 0x00, PINB: 0x00, PINC: 0x00	=> PORTD: 0x00"..."PINA: 0xFF, PINB: 0xFF, PINC: 0x00        => PORTD: 0x03"..."PINA: 0xFF, PINB: 0xFF, PINC: 0xFF        => PORTD: 0x01"..."PINA: 0x0A, PINB: 0xFA, PINC: 0xCB        => PORTD: 0x03"..."PINA: 0x1E, PINB: 0x78, PINC: 0x44        => PORTD: 0xD9"...======================================================
+Quitting: Remote doesn't know how to detach
