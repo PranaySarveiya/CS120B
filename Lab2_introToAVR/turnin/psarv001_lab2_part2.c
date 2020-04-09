@@ -1,4 +1,5 @@
- /*	Lab Section: 025
+ /*	Pranay Sarveiya
+ *	Lab Section: 025
  *	Assignment: Lab #1  Exercise #2
  *	Exercise Description: [optional - include for your own benefit]
  *	Port A's pins 3 to 0, each connect to a parking space sensor, 1 meaning a car is parked in the space, of a four-space parking lot. Write a program that outputs in binary on port C the number of available spaces 

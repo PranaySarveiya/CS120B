@@ -1,4 +1,5 @@
- /*	Lab Section: 025
+ /*	Pranay Sarveiya
+ *	Lab Section: 025
  *	Assignment: Lab #1  Exercise #4
  *	Exercise Description: [optional - include for your own benefit]
  *	(Challenge) An amusement park kid ride cart has three seats, with 8-bit weight sensors connected to ports A, B, and C (measuring from 0-255 kilograms). Set PD0 to 1 if the cart's total passenger weight exceeds the maximum of 140 kg. Also, the cart must be balanced: Set port PD1 to 1 if the difference between A and C exceeds 80 kg.  The remaining 6 bits on D should display an approximation of the total combined weight, accuratew within 3 kg.
