@@ -70,8 +70,18 @@ int main(void) {
 			D = D | totalWeight;
 		}		
 		PORTD = D;
+		
 
+		//restart variables
+		tempDiff = 0x00;
+		overwrite = 0x00;
+		A = 0x00;
+		B = 0x00;
+		C = 0x00;
+		D = 0x00;
 
+		totalWeight = 0x00;	
+		
 	return 1;
 
 	}
