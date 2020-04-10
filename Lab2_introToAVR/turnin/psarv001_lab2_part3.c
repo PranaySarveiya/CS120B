@@ -20,16 +20,22 @@ unsigned char GetBit(unsigned char x, unsigned char k) {
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0xFF;
-	DDRB = 0xFF; PORTB = 0x00;
 	DDRC = 0xff; PORTC = 0x00;
     /* Insert your solution below */
-	unsigned char cntavail = 0x00;
+	unsigned char cntavail = 0x04;
+	unsigned char i = 0x00;
+	unsigned tempA = 0x00;
 	while (1) {
-		cntavail = (PINA & 0x01) + ((PINA & 0x02) >> 1) + ((PINA & 0x04) >> 2) + ((PINA & 0x08) >> 3);
-		if(cntavail == 0x04) {
-			cntavail = cntavail | (0x80);
+		tempA = PINA;
+		for(i = 0; i < 4; ++i) {
+			cntavail -= GetBit(tempA, i);
+		}
+
+		if(cntavail == 0x00) {
+			cntavail = cntavail | 0x80;
 		}
 		PORTC = cntavail;
+		cntavail = 0x04;
 	}
 	return 0;
 

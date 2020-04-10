@@ -1,6 +1,8 @@
- /*	Lab Section:
- *	Assignment: Lab #  Exercise #
+ /*	Pranay Sarveiya
+ *	Lab Section: 025
+ *	Assignment: Lab #1  Exercise #3
  *	Exercise Description: [optional - include for your own benefit]
+ *	Extend the previous program to still write the available spaces number, but only to PC3..PC0, and to set PC7 to 1 if the lot is full.
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
@@ -10,29 +12,31 @@
 #include "simAVRHeader.h"
 #endif
 
-//If the weight goes over the maximum 255 and circles back to zero, I set the approximate weight to be 0 to indicate an error
-unsigned char GetBit (unsigned char x, unsigned char k) {
+unsigned char GetBit(unsigned char x, unsigned char k) {
 	return ( (x & (0x01 << k) ) != 0 );
 }
+
 
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0xFF;
-	DDRC = 0x00; PORTC = 0xFF;
+	DDRC = 0xff; PORTC = 0x00;
     /* Insert your solution below */
-	
-	unsigned char tmpA = 0x00;
+	unsigned char cntavail = 0x04;
 	unsigned char i = 0x00;
-	unsigned char countavail = 0x04;
-	
-	while(1) {
-		tmpA = PINA;
+	unsigned tempA = 0x00;
+	while (1) {
+		tempA = PINA;
 		for(i = 0; i < 4; ++i) {
-			countavail -= GetBit(tmpA, i);
+			cntavail -= GetBit(tempA, i);
 		}
-		PORTC = countavail;
-		countavail = 0x04;
+
+		if(cntavail == 0x00) {
+			cntavail = cntavail | 0x80;
+		}
+		PORTC = cntavail;
+		cntavail = 0x04;
 	}
-	
+	return 0;
 
 }
