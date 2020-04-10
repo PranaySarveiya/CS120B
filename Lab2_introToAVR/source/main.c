@@ -11,59 +11,28 @@
 #endif
 
 //If the weight goes over the maximum 255 and circles back to zero, I set the approximate weight to be 0 to indicate an error
+unsigned char GetBit (unsigned char x, unsigned char k) {
+	return ( (x & (0x01 << k) ) != 0 );
+}
 
 int main(void) {
     /* Insert DDR and PORT initializations */
 	DDRA = 0x00; PORTA = 0xFF;
-	DDRB = 0x00; PORTB = 0xFF;
 	DDRC = 0x00; PORTC = 0xFF;
-	DDRD = 0xFF; PORTD = 0x00;
     /* Insert your solution below */
 	
-
 	unsigned char tmpA = 0x00;
-	unsigned char tmpB = 0x00;
-	unsigned char tmpC = 0x00;
-	unsigned char tmpD = 0x00;
-	unsigned char tmpSum = 0x00;
+	unsigned char i = 0x00;
+	unsigned char countavail = 0x00;
+	
 	while(1) {
 		tmpA = PINA;
-		tmpB = PINB;
-		tmpC = PINC;
-		tmpSum = tmpA + tmpB + tmpC;
-		if( !((tmpA + tmpB < tmpA) | (tmpA + tmpC < tmpA) | (tmpB + tmpC < tmpB) | (tmpSum < tmpA + tmpB) | (tmpSum < tmpA + tmpC) | (tmpSum < tmpB + tmpC)) ) {
-			//no overwrite
-			tmpD = tmpD | (tmpSum & 0xFC);
-			if(tmpSum > 140) {
-				//Set PD0
-				tmpD = tmpD | 0x01;
-			}	
-
+		for(i = 0; i < 4; ++i) {
+			countavail += GetBit(tmpA, i);
 		}
-		else {
-			tmpD = tmpD | 0x01;
-			
-	
-		}
-		if(tmpA >tmpC) {
-			if(tmpA - tmpC > 80) {
-				tmpD = tmpD | 0x02;
-			}
-		}
-		else {
-			if(tmpC - tmpA > 80) {
-				tmpD = tmpD | 0x02;
-			}
-		}
-	PORTD = tmpD;
-
-
-        tmpA = 0x00;
-        tmpB = 0x00;
-        tmpB = 0x00;
-        tmpD = 0x00;
-        tmpSum = 0x00;
-
+		PORTC = countavail;
+		countavail = 0x00;
 	}
+	
 
 }
