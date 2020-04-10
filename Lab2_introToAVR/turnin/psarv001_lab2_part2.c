@@ -23,15 +23,15 @@ int main(void) {
 	
 	unsigned char tmpA = 0x00;
 	unsigned char i = 0x00;
-	unsigned char countavail = 0x00;
+	unsigned char countavail = 0x04;
 	
 	while(1) {
 		tmpA = PINA;
 		for(i = 0; i < 4; ++i) {
-			countavail += GetBit(tmpA, i);
+			countavail -= GetBit(tmpA, i);
 		}
 		PORTC = countavail;
-		countavail = 0x00;
+		countavail = 0x04;
 	}
 	
 
