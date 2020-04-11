@@ -26,54 +26,60 @@
 echo ======================================================\n
 echo Running all tests..."\n\n
 
-
-test "PINA = 0x00 -> PORTB = 0x00	PORTC = 0x00"
-setPINA 0x00
+test "D and B0: 0000 0000 0	-> [B2:B1] = 00"
+setPIND 0x00
+setPINB 0x00
 continue 5
 expectPORTB 0x00
-expectPORTC 0x00
 checkResult
 
-test "PINA = 0x01 -> PORTB = 0x00       PORTC = 0x10"
-setPINA 0x01
+test "D and B0: 0010 0011 0 (70)     -> [B2:B1] = 01"
+setPIND 0x23
+setPINB 0x00
+continue 5
+expectPORTB 0x02
+checkResult
+
+test "D and B0: 0010 0011 1 (71)     -> [B2:B1] = 01"
+setPIND 0x23
+setPINB 0x01
+continue 5
+expectPORTB 0x02
+checkResult
+
+test "D and B0: 1111 1111 1 (mx)     -> [B2:B1] = 01"
+setPIND 0xFF
+setPINB 0x01
+continue 5
+expectPORTB 0x02
+checkResult
+
+test "D and B0: 0010 0010 1  (69)   -> [B2:B1] = 10"
+setPIND 0x22
+setPINB 0x01
+continue 5
+expectPORTB 0x04
+checkResult
+
+test "D and B0: 0000 0011 0 (6)     -> [B2:B1] = 10"
+setPIND 0x03
+setPINB 0x00
+continue 5
+expectPORTB 0x04
+checkResult
+
+test "D and B0: 0000 0010 1 (5)     -> [B2:B1] = 00"
+setPIND 0x02
+setPINB 0x01
 continue 5
 expectPORTB 0x00
-expectPORTC 0x10
 checkResult
 
-test "PINA = 0x10 -> PORTB = 0x01       PORTC = 0x00"
-setPINA 0x10
-continue 5
-expectPORTB 0x01
-expectPORTC 0x00
-checkResult
-
-test "PINA = 0xFF -> PORTB = 0x0F       PORTC = 0xF0"
-setPINA 0xFF
-continue 5
-expectPORTB 0x0F
-expectPORTC 0xF0
-checkResult
-
-test "PINA = 0xCE -> PORTB = 0x0C       PORTC = 0xE0"
-setPINA 0xCE
-continue 5
-expectPORTB 0x0C
-expectPORTC 0xE0
-checkResult
-
-test "PINA = 0xF0 -> PORTB = 0x0F       PORTC = 0x00"
-setPINA 0xF0
-continue 5
-expectPORTB 0x0F
-expectPORTC 0x00
-checkResult
-
-test "PINA = 0x0F -> PORTB = 0x00       PORTC = 0xF0"
-setPINA 0x0F
+test "D and B0: 0000 0000 0     -> [B2:B1] = 00"
+setPIND 0x00
+setPINB 0x00
 continue 5
 expectPORTB 0x00
-expectPORTC 0xF0
 checkResult
 
 

@@ -17,14 +17,28 @@ int main(void) {
 
     /* Insert your solution below */
     
-	DDRA = 0x00; PORTA = 0xFF;	//input
-	DDRB = 0xFF; PORTB = 0x00;	//output
+	DDRD = 0x00; PORTD = 0xFF;	//input
+	DDRB = 0xFE; PORTB = 0x00;	//output	(B0 is set to input)
 	DDRC = 0xFF; PORTC = 0x00;	//output
 	
+	unsigned char tempD = 0x00;
+	unsigned char tempB = 0x00;
+	unsigned char temp5 = 0x00;
 	while(1) {
-		PORTB = (PINA & 0xF0) >> 4;
-		PORTC = (PINA & 0x0F) << 4;
-
+		tempD = PIND;
+		if(tempD >= 0x23) {
+			//B1 - 1
+			tempB = tempB | 0x02;
+		}
+		else {
+			temp5 = (tempD << 1) + (tempB & 0x01);
+			tempB = (temp5 > 5)  ? (tempB | 0x04) : tempB;
+		}
+		
+		PORTB = tempB;
+		
+		tempB = 0x00;
+		temp5 = 0x00;
 	}
 	return 1;
 }
