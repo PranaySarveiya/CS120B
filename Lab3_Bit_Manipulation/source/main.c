@@ -1,4 +1,4 @@
-/*	Author: psarv001
+	/*	Author: psarv001
  *  Partner(s) Name: 
  *	Lab Section:
  *	Assignment: Lab #  Exercise #
@@ -24,36 +24,52 @@ int main(void) {
 	DDRA = 0x00; PORTA = 0xFF;	//input
 	DDRC = 0xFF; PORTC = 0x00;	//output
 	
-	unsigned char tempA = 0x00;
+	unsigned char temp = 0x00;
 	unsigned char tempC = 0x00;
 	
 	while(1) {
-		tempA = PINA & 0x0F;
-		if(tempA >= 1) {
-			tempC = SetBit(tempC, 5, 1);
+		temp = PINA & 0x0F;
+		if(temp == 0) {
+			tempC = 0x40;
 		}
-		if(tempA >= 3) {
-                        tempC = SetBit(tempC, 4, 1);
-                }
-		if(tempA >= 5) {
-                        tempC = SetBit(tempC, 3, 1);
-                }
-		if(tempA >= 7) {
-                        tempC = SetBit(tempC, 2, 1);
-                }
-		if(tempA >= 10) {
-                        tempC = SetBit(tempC, 1, 1);
-                }
-		if(tempA >= 13) {
-                        tempC = SetBit(tempC, 0, 1);
-                }
-		
-		if(tempA <= 4) {
-			tempC = SetBit(tempC, 6, 1);
+		else if (temp <= 2) {
+			//C5
+			tempC = 0x60;
+			
 		}
 		
+		else if(temp <= 4) {
+			//C4
+			tempC = 0x70;
+                }
+		
+		else if(temp <= 6) {
+			//C3
+			tempC = 0x38;
+                }
+
+		else if(temp <= 9) {
+			//C2
+			tempC = 0x3C;
+                }
+	
+		else if(temp <= 12) {
+			//C1
+			tempC = 0x3E;
+                }
+
+		else if(temp <= 15) {
+			//C0
+			tempC = 0x3F;
+                }
+		else {
+			//Error
+			
+		}
+
+
 		PORTC = tempC;
-		tempA = 0x00;
+		temp = 0x00;
 		tempC = 0x00;
 
 
