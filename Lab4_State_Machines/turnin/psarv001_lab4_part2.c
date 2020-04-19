@@ -1,5 +1,5 @@
 /*	Author: psarv001
- *  Partner(s) Name:
+ *  Partner(s) Name: 
  *	Lab Section:
  *	Assignment: Lab #  Exercise #
  *	Exercise Description: [optional - include for your own benefit]
@@ -13,25 +13,41 @@
 #endif
 
 
-enum States {init, But1, wait, But2 } state;
+enum States {init, chck, inc, dec, reset} state;
 void Tick() {
 	switch(state) {	//Transitions
 		case init : //Initial Transition
-			state = (PINA & 0x01) ? But1 : init;
+			state = chck;
+			PORTC = 0x07;
 		 break;
 		
-		case But1 :
-			state = (PINA & 0x01) ? But1 : wait;
+		case chck :
+			if( (PINA & 0x01) && !(PINA & 0x02) && PORTC < 9) {
+				state = inc;
+			}
+			else if( (PINA & 0x01) && (PINA & 0x02)) {
+				state = reset;
+			}
+			else if( (PINA & 0x02) && !(PINA & 0x01) && PORTC > 0) {
+				state = dec;
+			}
+			else {
+				state = chck;
+			}
 		 break;
 		
-		case wait :
-			state = (PINA & 0x01) ? But2 : wait;
+		case inc :
+			state = chck;
 		 break;
 		
-		case But2 : 
-			state = (PINA & 0x01) ? But2 : init;
+		case reset : 
+			state = chck;
 		 break;
 		
+		case dec :
+			state = chck;
+		 break;
+
 		default :
 			state = init;
 		 break;
@@ -39,20 +55,24 @@ void Tick() {
 
 	switch(state) {	//State Actions
 		case init :
-			PORTB = 0x01;
+			//PORTC = 0x07;
 		 break;
 		
-		case But1 :
-			PORTB = 0x02;
+		case chck :
 		 break;
 
-		case wait : 
+		case inc : 
+			PORTC += 1;
 		 break;
 
-		case But2 :
-			PORTB = 0x01;
+		case reset :
+			PORTC = 0;
 		 break;
 		
+		case dec :
+			PORTC -= 1;
+		 break;
+
 		default :
 		 break;
 	}
@@ -61,12 +81,13 @@ void Tick() {
 
 int main(void) {
     /* Insert DDR and PORT initializations */
-	DDRA = 0x00; PORTA = 0xFF;
-	DDRB = 0xFF; PORTB = 0x00;
+	DDRA = 0x00; PORTA = 0xFF;	//input
+	DDRC = 0xFF; PORTC = 0x00;	//output
     /* Insert your solution below */
 	state = init;
 	while(1) {
 		Tick();
+	
 	}	  
 
 }

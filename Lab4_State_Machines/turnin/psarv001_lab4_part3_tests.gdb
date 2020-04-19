@@ -137,31 +137,8 @@ expectPORTB 0x00
 expect state lock
 checkResult
 
-test "Check locking with combination while unlocked"
-set state = unlock
-setPINA 0x04
-continue
-expectPORTB 0x01
-expect state pressHash
-checkResult
 
 
-test "Check locking with combination while unlocked (full test)"
-set state = unlock
-setPINA 0x04
-continue 2
-
-setPINA 0x00
-continue 2
-
-setPINA 0x02
-continue 2
-expectPORTB 0x00
-expect state lock
-
-
-
-checkResult
 
 
 

@@ -12,19 +12,15 @@
 #include "simAVRHeader.h"
 #endif
 
-unsigned char DoLock = 0x00;
-
 enum States {init, lock, pressHash, releaseHash, unlock} state;
 void Tick() {
 	switch(state) {	//Transitions
 		case init : //Initial Transition
 			state = lock;
 			PORTB = 0x00;
-			DoLock = 0x00;
 		  break;
 		
 		case lock :
-			DoLock = 0x00;
 			state = ( (PINA & 0x04) && !(PINA & 0x02) && !(PINA & 0x01) ) ? pressHash : lock;
 		 break;
 		
@@ -36,12 +32,7 @@ void Tick() {
 				state = releaseHash;
 			}
 			else {
-				if(DoLock) {
-					state = unlock;
-				}
-				else {
-					state = init;
-				}
+				state = lock;
 			}
 		 break;
 		
@@ -50,36 +41,16 @@ void Tick() {
 				state = releaseHash;
 			}
 			else if( !(PINA & 0x04) && (PINA & 0x02) && !(PINA & 0x01) ) {
-				if(DoLock) {
-					state = lock;
-				}
-				else {
-					state = unlock;
-				}
+				state = unlock;
 			}
 			else {
-				if(DoLock) {
-                                        state = unlock;
-                                }
-                                else {
-                                        state = init;
-                                }
+				state = init;
 			}
 		 break;
 		
 
 		case unlock :
-			if(PINA & 0x80) {
-				state = lock;
-			}
-			else if((PINA & 0x04) && !(PINA & 0x02) && !(PINA & 0x01)) {
-				state = pressHash;
-				DoLock = 0x01;
-				PORTB = 0x01;
-			}
-			else {
-				state = unlock;
-			}
+			state = (PINA & 0x80) ? lock : unlock;
 		 break;
 		
 		default :
