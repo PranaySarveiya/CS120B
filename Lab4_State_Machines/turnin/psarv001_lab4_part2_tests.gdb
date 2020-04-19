@@ -29,82 +29,173 @@ echo Running all tests..."\n\n
 test "Check init => chck & chck loop"
 set state = init
 setPINA 0x00
-continue 2
+continue 10
 expectPORTC 0x07
 expect state chck
 checkResult
 
-test "Check chck => inc"
-set state = chck
-setPINA 0x01
-setPINC 0x06
-continue 2
-expectPORTC 0x08
-expect state chck
-checkResult
 
-test "Check chck => inc (edge)"
-set state = chck
+test "Check chck -> inc (right edge)"
+set state = init
 setPINA 0x01
-setPINC 0x09
-continue 2
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x01
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x01
+continue 10
+
 expectPORTC 0x09
 expect state chck
 checkResult
 
-test "Check chck => reset"
-set state = chck
-setPINA 0x03
-setPINC 0x06
-continue 2
-expectPORTC 0x00
-expect state chck
-checkResult
-
-test "Check chck => reset (edge)"
-set state = chck
-setPINA 0x03
-setPINC 0x08
-continue 2
-expectPORTC 0x00
-expect state chck
-checkResult
-
-test "Check chck => reset (edge 2)"
-set state = chck
-setPINA 0x03
-setPINC 0x00
-continue 2
-expectPORTC 0x00
-expect state chck
-checkResult
-
-test "Check chck => dec"
-set state = chck
+test "Check chck -> inc from left edge and dec to 0"
+set state = init
 setPINA 0x02
-setPINC 0x06
-continue 2
-expectPORTC 0x00
-expect state chck
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x01
+continue 10
+
+expectPORTC 0x01
+expect state wait
 checkResult
 
-test "Check chck => dec (edge)"
-set state = chck
+test "Check chck -> dec"
+set state = init
 setPINA 0x02
-setPINC 0x09
-continue 2
-expectPORTC 0x00
-expect state chck
+continue 10
+
+expectPORTC 0x06
+expect state wait
 checkResult
 
-test "Check chck => dec (edge 2)"
-set state = chck
+test "Check chck -> dec (left edge)"
+set state = init
 setPINA 0x02
-setPINC 0x00
-continue 2
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
 expectPORTC 0x00
 expect state chck
 checkResult
+#test "Check chck -> dec (right edge)"
+
+#test "chck -> dec"
+#test "reset ->reset"
+#test "reset ->chck"
+#test "wait -> reset"
+#test "wait -> chck"
+#test "wait -> wait"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

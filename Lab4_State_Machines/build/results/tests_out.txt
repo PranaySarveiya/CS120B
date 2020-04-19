@@ -1,7 +1,7 @@
-Breakpoint 1 at 0x28c: file source/main.c, line 122.
+Breakpoint 1 at 0x242: file source/main.c, line 112.
 Note: automatically using hardware breakpoints for read-only addresses.
 ======================================================
 Running all tests..."
 
-"Check init -> lock"..."Check lock -> lock"..."Check lock -> lock (2)"..."Check lock -> pressHash"..."Check pressHash -> pressHash"..."Check pressHash -> releaseHash"..."Check pressHash -> lock"..."Check pressHash -> lock (2)"..."Check releaseHash -> releaseHash"..."Check releaseHash -> unlock"..."Check releaseHash -> lock"..."Check releaseHash -> lock (2)"..."Check unlock -> unlock"..."Check unlock -> lock (2)"..."Check locking with combination while unlocked"..."Check locking with combination while unlocked (full test)"...======================================================
+"Check init => chck & chck loop"..."Check chck -> inc (right edge)"..."Check chck -> inc from left edge and dec to 0"..."Check chck -> dec"..."Check chck -> dec (left edge)"...======================================================
 Quitting: Remote doesn't know how to detach

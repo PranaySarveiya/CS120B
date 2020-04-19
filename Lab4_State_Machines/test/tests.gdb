@@ -26,142 +26,178 @@
 echo ======================================================\n
 echo Running all tests..."\n\n
 
-test "Check init -> lock"
+test "Check init => chck & chck loop"
 set state = init
-continue 2
-expectPORTB 0x00
-expect state lock
-checkResult
-
-test "Check lock -> lock"
-set state = lock
-setPINA 0x03
-continue 2
-expectPORTB 0x00
-expect state lock
-checkResult
-
-test "Check lock -> lock (2)"
-set state = lock
-setPINA 0x01
-continue 2
-expectPORTB 0x00
-expect state lock
-checkResult
-
-test "Check lock -> pressHash"
-set state = lock
-setPINA 0x04
-continue 2
-expectPORTB 0x00
-expect state pressHash
-checkResult
-
-test "Check pressHash -> pressHash"
-set state = pressHash
-setPINA 0x04
-continue 2
-expectPORTB 0x00
-expect state pressHash
-checkResult
-
-test "Check pressHash -> releaseHash"
-set state = pressHash
 setPINA 0x00
-continue 2
-expectPORTB 0x00
-expect state releaseHash
+continue 10
+expectPORTC 0x07
+expect state chck
 checkResult
 
-test "Check pressHash -> lock"
-set state = pressHash
+
+test "Check chck -> inc (right edge)"
+set state = init
 setPINA 0x01
-continue 2
-expectPORTB 0x00
-expect state lock
-checkResult
+continue 10
 
-test "Check pressHash -> lock (2)"
-set state = pressHash
-setPINA 0x03
-continue 2
-expectPORTB 0x00
-expect state lock
-checkResult
-
-test "Check releaseHash -> releaseHash"
-set state = releaseHash
 setPINA 0x00
-continue 2
-expectPORTB 0x00
-expect state releaseHash
+continue 10
+
+setPINA 0x01
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x01
+continue 10
+
+expectPORTC 0x09
+expect state chck
 checkResult
 
-test "Check releaseHash -> unlock"
-set state = releaseHash
+test "Check chck -> inc from left edge and dec to 0"
+set state = init
 setPINA 0x02
-continue 2
-expectPORTB 0x01
-expect state unlock
-checkResult
-
-test "Check releaseHash -> lock"
-set state = releaseHash
-setPINA 0x04
-continue 2
-expectPORTB 0x00
-expect state lock
-checkResult
-
-test "Check releaseHash -> lock (2)"
-set state = releaseHash
-setPINA 0x03
-continue 2
-expectPORTB 0x00
-expect state lock
-checkResult
-
-test "Check unlock -> unlock"
-set state = unlock
-setPINA 0x7F
-continue 2
-expectPORTB 0x01
-expect state unlock
-checkResult
-
-test "Check unlock -> lock (2)"
-set state = unlock
-setPINA 0x80
-continue 2
-expectPORTB 0x00
-expect state lock
-checkResult
-
-test "Check locking with combination while unlocked"
-set state = unlock
-setPINA 0x04
-continue
-expectPORTB 0x01
-expect state pressHash
-checkResult
-
-
-test "Check locking with combination while unlocked (full test)"
-set state = unlock
-setPINA 0x04
-continue 2
+continue 10
 
 setPINA 0x00
-continue 2
+continue 10
 
 setPINA 0x02
-continue 2
-expectPORTB 0x00
-expect state lock
+continue 10
 
+setPINA 0x00
+continue 10
 
+setPINA 0x02
+continue 10
 
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x01
+continue 10
+
+expectPORTC 0x01
+expect state wait
 checkResult
+
+test "Check chck -> dec"
+set state = init
+setPINA 0x02
+continue 10
+
+expectPORTC 0x06
+expect state wait
+checkResult
+
+test "Check chck -> dec (left edge)"
+set state = init
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+setPINA 0x00
+continue 10
+
+setPINA 0x02
+continue 10
+
+expectPORTC 0x00
+expect state chck
+checkResult
+#test "Check chck -> dec (right edge)"
+
+#test "chck -> dec"
+#test "reset ->reset"
+#test "reset ->chck"
+#test "wait -> reset"
+#test "wait -> chck"
+#test "wait -> wait"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,133 +1,118 @@
-/*	Author: psarv001
- *  Partner(s) Name: 
- *	Lab Section:
- *	Assignment: Lab #  Exercise #
- *	Exercise Description: [optional - include for your own benefit]
- *
- *	I acknowledge all content contained herein, excluding template or example
- *	code, is my own original work.
- */
+/*      Author: psarv001
+ *       *  Partner(s) Name:
+ *        *      Lab Section:
+ *         *      Assignment: Lab #  Exercise #
+ *          *      Exercise Description: [optional - include for your own benefit]
+ *           *
+ *            *      I acknowledge all content contained herein, excluding template or example
+ *             *      code, is my own original work.
+ *              */
 #include <avr/io.h>
 #ifdef _SIMULATE_
 #include "simAVRHeader.h"
 #endif
 
-unsigned char DoLock = 0x00;
-
-enum States {init, lock, pressHash, releaseHash, unlock} state;
+unsigned char tempC = 0x00;
+enum States {init, chck, inc, dec, reset, wait} state;
 void Tick() {
-	switch(state) {	//Transitions
-		case init : //Initial Transition
-			state = lock;
-			PORTB = 0x00;
-			DoLock = 0x00;
-		  break;
-		
-		case lock :
-			DoLock = 0x00;
-			state = ( (PINA & 0x04) && !(PINA & 0x02) && !(PINA & 0x01) ) ? pressHash : lock;
-		 break;
-		
-		case pressHash :
-			if( (PINA & 0x04) && !(PINA & 0x02) && !(PINA & 0x01) ) {
-				state = pressHash;
+        switch(state) { //Transitions
+                case init : //Initial Transition
+			PORTC = 0x07;
+			state = chck;
+			
+                 break;
+
+                case chck :
+			tempC = PORTC;
+			if( (PINA & 0x01) && !(PINA & 0x02) && (tempC < 0x09) ) {
+				state = inc;
 			}
-			else if( !(PINA & 0x04) && !(PINA & 0x02) && !(PINA & 0x01) ) {
-				state = releaseHash;
+			else if( !(PINA & 0x01) && (PINA & 0x02) && (tempC > 0x00) ) {
+				state = dec;	
+			}
+			else if( (PINA & 0x01) && (PINA & 0x02)) {
+				state = reset;
 			}
 			else {
-				if(DoLock) {
-					state = unlock;
-				}
-				else {
-					state = init;
-				}
+				state = chck;
 			}
-		 break;
-		
-		case releaseHash : 
-			if( !(PINA & 0x04) && !(PINA & 0x02) && !(PINA & 0x01) ) {
-				state = releaseHash;
-			}
-			else if( !(PINA & 0x04) && (PINA & 0x02) && !(PINA & 0x01) ) {
-				if(DoLock) {
-					state = lock;
-				}
-				else {
-					state = unlock;
-				}
+                 break;
+
+                case inc :
+		//	PORTC += 1;
+			state = wait;
+                 break;
+
+                case reset :
+		//	PORTC = 0;
+			if(!(PINA & 0x01) && !(PINA & 0x02)) {
+				state = chck;
 			}
 			else {
-				if(DoLock) {
-                                        state = unlock;
-                                }
-                                else {
-                                        state = init;
-                                }
+				state = reset;
 			}
-		 break;
-		
+			
+                 break;
 
-		case unlock :
-			if(PINA & 0x80) {
-				state = lock;
+                case dec :
+		//	PORTC -= 1;
+			state = wait;
+                 break;
+
+                case wait :
+			if((PINA & 0x01) && (PINA & 0x02)) {
+				state = reset;
 			}
-			else if((PINA & 0x04) && !(PINA & 0x02) && !(PINA & 0x01)) {
-				state = pressHash;
-				DoLock = 0x01;
-				PORTB = 0x01;
+			else if( !(PINA & 0x01) && !(PINA & 0x02) ) {
+				state = chck;
 			}
 			else {
-				state = unlock;
+				state = wait;
 			}
-		 break;
-		
-		default :
-			state = init;
-		 break;
-	}	
+                 break;
 
-	switch(state) {	//State Actions
-		case init :
-			PORTB = 0x00;
-			//action done in transition
-		 break;
-		
-		case lock :
-			PORTB = 0x00;
-		 break;
+                default :
+                 break;
+        }
 
-		case pressHash : 
-		 break;
+        switch(state) { //State Actions
+                case init :
+                 break;
 
-		case releaseHash :
-		 break;
-		
-		case unlock :
-			PORTB = 0x01;
-		 break;
+                case chck :
 
-		default :
-		 break;
-	}
+                 break;
 
+                case inc :
+			PORTC = PORTC + 0x01;
+                 break;
+
+                case reset :
+			PORTC = 0;
+                 break;
+
+                case dec :
+			PORTC -= 1;
+                 break;
+
+                case wait :
+                 break;
+
+                default :
+                 break;
+        }
 }
+
 
 int main(void) {
     /* Insert DDR and PORT initializations */
-	DDRA = 0x00; PORTA = 0xFF;	//input
-	DDRB = 0xFF; PORTB = 0x00;	//output
+	DDRA = 0x00; PORTA = 0xFF; //input
+	DDRC = 0xFF; PORTC = 0x00; //output
     /* Insert your solution below */
-	state = init;
 	while(1) {
 		Tick();
-	
-	}	  
+	}
 
 }
-
-
-
-
 
 
